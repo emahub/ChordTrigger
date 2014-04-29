@@ -70,12 +70,46 @@ class ChCopy : public AUMonotimbralInstrumentBase {
 
 AUDIOCOMPONENT_ENTRY(AUMusicDeviceFactory, ChCopy)
 
+enum {
+  kParameter_FromCh = 0,
+  kParameter_ToCh = 1,
+  kParameter_KeyRangeMin = 2,
+  kParameter_KeyRangeMax = 3,
+  kParameter_Transpose = 4,
+  kParameter_Damper = 5,
+  kParameter_OtherCC = 6,
+  kParameter_PitchBend = 7,
+  kParameter_OtherMessages = 8,
+  kNumberOfParameters = 9
+};
+// static const map<int, CFStringRef> kMapParam2Name;
+
+static const CFStringRef kParamName_FromCh = CFSTR("Copy Channel From: ");
+static const CFStringRef kParamName_ToCh = CFSTR("Copy Channel To: ");
+static const CFStringRef kParamName_KeyRangeMin = CFSTR("Key Range Min: ");
+static const CFStringRef kParamName_KeyRangeMax = CFSTR("Key Range Max: ");
+static const CFStringRef kParamName_Transpose = CFSTR("Transpose: ");
+static const CFStringRef kParamName_Damper = CFSTR("Damper");
+static const CFStringRef kParamName_OtherCC = CFSTR("Other Control Changes");
+static const CFStringRef kParamName_PitchBend = CFSTR("PitchBend");
+static const CFStringRef kParamName_OtherMessages = CFSTR("Other Messages");
+
 ChCopy::ChCopy(AudioComponentInstance inComponentInstance)
     : AUMonotimbralInstrumentBase(inComponentInstance, 0,
                                   1) {  // should be 1 for output midi
   CreateElements();
 
-  Globals()->UseIndexedParameters(16);  // we're defining 16 param
+  Globals()->UseIndexedParameters(kNumberOfParameters);
+
+  Globals()->SetParameter(kParameter_FromCh, 1);
+  Globals()->SetParameter(kParameter_ToCh, 2);
+  Globals()->SetParameter(kParameter_KeyRangeMin, 1);
+  Globals()->SetParameter(kParameter_KeyRangeMax, 127);
+  Globals()->SetParameter(kParameter_Transpose, 0);
+  Globals()->SetParameter(kParameter_Damper, 1);
+  Globals()->SetParameter(kParameter_OtherCC, 1);
+  Globals()->SetParameter(kParameter_PitchBend, 1);
+  Globals()->SetParameter(kParameter_OtherMessages, 1);
 
 #ifdef DEBUG
   string bPath, bFullFileName;
@@ -155,23 +189,78 @@ OSStatus ChCopy::GetParameterInfo(AudioUnitScope inScope,
                                   AudioUnitParameterID inParameterID,
                                   AudioUnitParameterInfo &outParameterInfo) {
 
-  if (inParameterID >= 16) return kAudioUnitErr_InvalidParameter;
+#ifdef DEBUG
+  DEBUGLOG_B("GetParameterInfo - inScope: " << inScope << endl);
+  DEBUGLOG_B("GetParameterInfo - inParameterID: " << inParameterID << endl);
+#endif
 
   if (inScope != kAudioUnitScope_Global) return kAudioUnitErr_InvalidScope;
 
-  outParameterInfo.flags = SetAudioUnitParameterDisplayType(
-      0, kAudioUnitParameterFlag_DisplaySquareRoot);
   outParameterInfo.flags += kAudioUnitParameterFlag_IsWritable;
   outParameterInfo.flags += kAudioUnitParameterFlag_IsReadable;
 
-  CFStringRef cfs =
-      CFStringCreateWithFormat(NULL, NULL, CFSTR("Ch%d"), inParameterID + 1);
-  AUBase::FillInParameterName(outParameterInfo, cfs, false);
-  outParameterInfo.unit = kAudioUnitParameterUnit_Boolean;
-  outParameterInfo.minValue = 0;
-  outParameterInfo.maxValue = 1;
-  // default value should be set in construtor with SetParameter method.
-  // outParameterInfo.defaultValue = 1;
+  switch (inParameterID) {
+    case kParameter_FromCh:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_FromCh, false);
+      outParameterInfo.unit = kAudioUnitParameterUnit_Indexed;
+      outParameterInfo.minValue = 1;
+      outParameterInfo.maxValue = 16;
+      break;
+    case kParameter_ToCh:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_ToCh, false);
+      outParameterInfo.unit = kAudioUnitParameterUnit_Indexed;
+      outParameterInfo.minValue = 1;
+      outParameterInfo.maxValue = 16;
+      break;
+    case kParameter_KeyRangeMin:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_KeyRangeMin,
+                                  false);
+      outParameterInfo.unit = kAudioUnitParameterUnit_MIDINoteNumber;
+      outParameterInfo.minValue = 1;
+      outParameterInfo.maxValue = 127;
+      break;
+    case kParameter_KeyRangeMax:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_KeyRangeMax,
+                                  false);
+      outParameterInfo.unit = kAudioUnitParameterUnit_MIDINoteNumber;
+      outParameterInfo.minValue = 1;
+      outParameterInfo.maxValue = 127;
+      break;
+    case kParameter_Transpose:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_Transpose,
+                                  false);
+      outParameterInfo.unit = kAudioUnitParameterUnit_MIDINoteNumber;
+      outParameterInfo.minValue = -127;
+      outParameterInfo.maxValue = 127;
+      break;
+    case kParameter_Damper:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_Damper, false);
+      break;
+    case kParameter_OtherCC:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_OtherCC, false);
+      break;
+    case kParameter_PitchBend:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_PitchBend,
+                                  false);
+      break;
+    case kParameter_OtherMessages:
+      AUBase::FillInParameterName(outParameterInfo, kParamName_OtherMessages,
+                                  false);
+      break;
+    default:
+      return kAudioUnitErr_InvalidParameter;
+  }
+
+  if (inParameterID == kParameter_Damper ||
+      inParameterID == kParameter_OtherCC ||
+      inParameterID == kParameter_PitchBend ||
+      inParameterID == kParameter_OtherMessages) {
+    outParameterInfo.flags += SetAudioUnitParameterDisplayType(
+        0, kAudioUnitParameterFlag_DisplaySquareRoot);
+    outParameterInfo.unit = kAudioUnitParameterUnit_Boolean;
+    outParameterInfo.minValue = 0;
+    outParameterInfo.maxValue = 1;
+  }
 
   return noErr;
 }
@@ -217,12 +306,54 @@ OSStatus ChCopy::SetProperty(AudioUnitPropertyID inID, AudioUnitScope inScope,
 
 OSStatus ChCopy::HandleMidiEvent(UInt8 status, UInt8 channel, UInt8 data1,
                                  UInt8 data2, UInt32 inStartFrame) {
-  // data1 : note number, data2 : velocity
+// data1 : note number, data2 : velocity
 
-  // snag the midi event and then store it in a vector
-  if (!Globals()->GetParameter(channel) ||
-      ((status != 0x80 && status != 0x90) || (status == 0x80 && data1 != 0x00)))
-    mCallbackHelper.AddMIDIEvent(status, channel, data1, data2, inStartFrame);
+#ifdef DEBUG
+  DEBUGLOG_B("HandleMidiEvent - status:"
+             << (int)status << " ch:" << (int)channel << " data1:" << (int)data1
+             << " data2:" << (int)data2 << endl);
+#endif
+
+  bool add = false;
+  int diff_data1 = 0;
+  if (Globals()->GetParameter(kParameter_FromCh) - 1 == channel) {
+    switch (status) {
+      case 0x80:
+      case 0x90: {
+        int min = Globals()->GetParameter(kParameter_KeyRangeMin);
+        int max = Globals()->GetParameter(kParameter_KeyRangeMax);
+        if (data1 >= min && data2 <= max) {
+          add = true;
+          diff_data1 = Globals()->GetParameter(kParameter_Transpose);
+        }
+
+#ifdef DEBUG
+        DEBUGLOG_B("HandleMidiEvent - min:" << min << " max:" << max
+                                            << " add:" << add << endl);
+#endif
+      } break;
+
+      case 0xb0:
+        if (Globals()->GetParameter(kParameter_Damper) && data1 == 64)
+          add = true;
+        else if (Globals()->GetParameter(kParameter_OtherCC) && data1 != 64)
+          add = true;
+        break;
+
+      case 0xe0:
+        if (Globals()->GetParameter(kParameter_PitchBend)) add = true;
+        break;
+
+      default:
+        if (Globals()->GetParameter(kParameter_OtherMessages)) add = true;
+    }
+  }
+
+  mCallbackHelper.AddMIDIEvent(status, channel, data1, data2, inStartFrame);
+  if (add)
+    mCallbackHelper.AddMIDIEvent(status,
+                                 Globals()->GetParameter(kParameter_ToCh) - 1,
+                                 data1 + diff_data1, data2, inStartFrame);
 
   return AUMIDIBase::HandleMidiEvent(status, channel, data1, data2,
                                      inStartFrame);

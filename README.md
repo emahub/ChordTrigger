@@ -1,6 +1,13 @@
 ChCopy
 ============
 
+Copy MIDI Signal to Another Channel
+
+This MIDI FX Plugin copy MIDI signal from a channel to the another channel.
+
+![image](image.png)
+
+
 ## Installation
 
 Generally, Audio Units Plugins are available for only Mac OSX.
