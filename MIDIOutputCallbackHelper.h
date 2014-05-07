@@ -6,14 +6,14 @@
 //
 //
 
-#ifndef __ChCopy__MIDIOutputCallbackHelper__
-#define __ChCopy__MIDIOutputCallbackHelper__
+#ifndef __MIDIOutputCallbackHelper__
+#define __MIDIOutputCallbackHelper__
 
 #include <iostream>
 #include <CoreMIDI/CoreMIDI.h>
 #include <vector>
 
-#endif /* defined(__ChCopy__MIDIOutputCallbackHelper__) */
+#endif /* defined(__MIDIOutputCallbackHelper__) */
 
 typedef struct MIDIMessageInfoStruct {
   UInt8 status;

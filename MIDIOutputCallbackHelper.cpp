@@ -1,6 +1,5 @@
 //
 //  MIDIOutputCallbackHelper.cpp
-//  ChCopy
 //
 //  Created by ema on 2014/04/29.
 //

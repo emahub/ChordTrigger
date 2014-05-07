@@ -6,17 +6,17 @@
 	<array>
 		<dict>
 			<key>description</key>
-			<string>Copy MIDI Signal to Another Channel</string>
+			<string>single note to multiple notes</string>
 			<key>factoryFunction</key>
-			<string>ChCopyFactory</string>
+			<string>ChordTriggerFactory</string>
 			<key>manufacturer</key>
 			<string>EMAH</string>
 			<key>name</key>
-			<string>Emahub: ChCopy</string>
+			<string>Emahub: ChordTrigger</string>
 			<key>sandboxSafe</key>
 			<true/>
 			<key>subtype</key>
-			<string>chco</string>
+			<string>chtr</string>
 			<key>type</key>
 			<string>aumi</string>
 			<key>version</key>
@@ -26,15 +26,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>ChCopy</string>
+	<string>ChordTrigger</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.audiounit.ChCopy</string>
+	<string>com.emahub.audiounit.ChordTrigger</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>ChCopy</string>
+	<string>ChordTrigger</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>

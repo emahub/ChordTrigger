@@ -1,9 +1,7 @@
-ChCopy
+ChordTrigger
 ============
 
-Copy MIDI Signal to Another Channel
-
-This MIDI FX Plugin copy MIDI signal from a channel to the another channel.
+ChordTrigger MIDI FX
 
 ![image](image.png)
 
@@ -12,8 +10,8 @@ This MIDI FX Plugin copy MIDI signal from a channel to the another channel.
 
 Generally, Audio Units Plugins are available for only Mac OSX.
 
-1. Click "Download ZIP" and extract ChCopy.component.
-2. Move ChCopy.component to /Library/Audio/Plug-Ins/Components
+1. Click "Download ZIP" and extract ChordTrigger.component.
+2. Move ChordTrigger.component to /Library/Audio/Plug-Ins/Components
 
 ## Available DAW
 
@@ -22,4 +20,4 @@ Generally, Audio Units Plugins are available for only Mac OSX.
 
 ## License
 
-ChCopy has an MIT Licence http://en.wikipedia.org/wiki/MIT_License
+ChordTrigger has an MIT Licence http://en.wikipedia.org/wiki/MIT_License
