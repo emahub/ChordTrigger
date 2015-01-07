@@ -349,7 +349,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = A919E32C088DC18A008B8742 /* Build configuration list for PBXProject "ChordTrigger" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -467,7 +467,7 @@
 		85AF3A811906B01B00A89B85 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "-DCA_AUTO_MIDI_MAP=1";
 				SDKROOT = macosx;
 			};
@@ -514,7 +514,7 @@
 		A919E32D088DC18A008B8742 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "-DCA_AUTO_MIDI_MAP=1";
 				SDKROOT = macosx;
 			};

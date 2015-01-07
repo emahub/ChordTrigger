@@ -10,29 +10,29 @@
 	<string>ChordTrigger</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>071E6EDA-287D-4CD3-87B7-1F0137576A99</key>
-		<string>ssh://github.com/emahub/ChCopy.git</string>
+		<key>BDFA4F6952321FE9420CFDCEDA229062245B3C1A</key>
+		<string>github.com:emahub/ChordTrigger.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ChordTrigger.xcodeproj/project.xcworkspace</string>
+	<string>ChordTrigger/ChordTrigger.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>071E6EDA-287D-4CD3-87B7-1F0137576A99</key>
-		<string>../..</string>
+		<key>BDFA4F6952321FE9420CFDCEDA229062245B3C1A</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/emahub/ChCopy.git</string>
+	<string>github.com:emahub/ChordTrigger.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>071E6EDA-287D-4CD3-87B7-1F0137576A99</string>
+	<string>BDFA4F6952321FE9420CFDCEDA229062245B3C1A</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>071E6EDA-287D-4CD3-87B7-1F0137576A99</string>
+			<string>BDFA4F6952321FE9420CFDCEDA229062245B3C1A</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ChordTrigger</string>
 		</dict>
