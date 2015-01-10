@@ -55,7 +55,7 @@ public:
     
 private:
     MIDIOutputCallbackHelper mCallbackHelper;
-    bool noteFlag[kNoteTop];
+    int noteFlag[kNoteTop];
     
 protected:
 #ifdef DEBUG
@@ -85,7 +85,7 @@ ChordTrigger::ChordTrigger(AudioComponentInstance inComponentInstance)
     Globals()->SetParameter(kParameter_Ch, 1);
     for (int i = 1; i < kNumberOfParameters; i++) Globals()->SetParameter(i, 0);
     
-    for(int i =0; i<kNoteTop; i++) noteFlag[i] = TRUE;
+    for(int i =0; i<kNoteTop; i++) noteFlag[i] = 0;
     
 #ifdef DEBUG
     string bPath, bFullFileName;
@@ -259,8 +259,10 @@ OSStatus ChordTrigger::HandleMidiEvent(UInt8 status, UInt8 channel, UInt8 data1,
     if (channel == Globals()->GetParameter(kParameter_Ch) - 1 &&
         (status == kNoteOn || status == kNoteOff)) {
         
-        bool isApplied = false;
-        bool isNoteOn = data2 > 0 || status != kNoteOff;
+        bool isThruNote = false;
+        //bool isNoteOn = data2 > 0 || status != kNoteOff;
+        
+        if(data2 == 0) status = kNoteOff;   // velocity = 0 Noteon -> Noteoff
         
         for (int i = 1; i < kNumberOfParameters; i += (kNumberOfOutputNotes + 1)) {
             int noteCheckNumber = Globals()->GetParameter(i);
@@ -271,24 +273,35 @@ OSStatus ChordTrigger::HandleMidiEvent(UInt8 status, UInt8 channel, UInt8 data1,
                     
                     if (noteOnOffNumber != 0) {
                         
-                        if (noteFlag[noteOnOffNumber] && isNoteOn)
-                            mCallbackHelper.AddMIDIEvent(kNoteOff, channel, noteOnOffNumber, 0, inStartFrame);
-                        
-                        mCallbackHelper.AddMIDIEvent(status, channel, noteOnOffNumber,
-                                                     data2, inStartFrame);
-                        
-                        noteFlag[noteOnOffNumber] = isNoteOn;
+                        if(status == kNoteOn){
+                            if(noteFlag[noteOnOffNumber] > 0)
+                                mCallbackHelper.AddMIDIEvent(kNoteOff, channel, noteOnOffNumber, 0, inStartFrame);
+                            mCallbackHelper.AddMIDIEvent(status, channel, noteOnOffNumber,
+                                                         data2, inStartFrame);
+                            
+                            noteFlag[noteOnOffNumber] = data1;
+                        } else {
+                            if(noteFlag[noteOnOffNumber] == data1){
+                                mCallbackHelper.AddMIDIEvent(status, channel, noteOnOffNumber,
+                                                             data2, inStartFrame);
+                                noteFlag[noteOnOffNumber] = 0;
+                            }
+                        }
                     }
                 }
                 
-                isApplied = true;
+                isThruNote = true;
                 break;
             }
         }
         
-        if (!isApplied)
+        if (!isThruNote) {
+            if(noteFlag[data1] != 0) {
+                mCallbackHelper.AddMIDIEvent(kNoteOff, channel, data1, 0, inStartFrame);
+                noteFlag[data1] = 0;
+            }
             mCallbackHelper.AddMIDIEvent(status, channel, data1, data2, inStartFrame);
-        
+        }
     } else
         mCallbackHelper.AddMIDIEvent(status, channel, data1, data2, inStartFrame);
     
